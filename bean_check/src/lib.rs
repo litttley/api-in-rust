@@ -1,3 +1,4 @@
+
 extern crate proc_macro;
 extern crate regex;
 
@@ -25,6 +26,8 @@ pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
 }
 
 fn generate_validate(ast: &syn::DeriveInput) -> TokenStream {
+
+    //eprintln!{"{:#?}",ast};
     let name = &ast.ident;
     let mut validate_quote = quote! {};
 
@@ -39,10 +42,11 @@ fn generate_validate(ast: &syn::DeriveInput) -> TokenStream {
 
                     ff.named.iter().for_each(|f| {
 
-                        let ident = &f.ident;
+                        let ident = &f.ident;//校验注解UserDO
 
                         fv_map_quote = quote! {
                             #fv_map_quote
+                            //eprintln!{"{:#?}",self}; self是结构体本身
                             mm.insert(stringify!(#ident), format!("{}", self.#ident));
                         };
 
@@ -65,12 +69,14 @@ fn generate_validate(ast: &syn::DeriveInput) -> TokenStream {
                             }
 
                             if !at.tokens.is_empty() {
+
                                 param = format!("{}", at.tokens);
                             }
-
+                            //eprintln!{"{:#?}", param};//获取到属性参数   #[Min(30)]
                             let tmp = param.replace("(", "").replace(")", "").replace(" ", "");
 
                             // handle String field
+                            eprintln!{"{:#?}", ft };//
                             if ft == "String".to_owned() {
                                 // handle property : Length(1,2)
                                 if prop == "Length".to_string() && param.len() > 0 {

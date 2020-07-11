@@ -11,7 +11,7 @@ use std::str::FromStr;
 use std::collections::BTreeMap;
 use md5::{Md5, Digest};
 
-#[derive(BeanCheck)]
+#[derive(BeanCheck,Debug)]
 struct UserDO {
     #[Min(30)]
     pub min_age: u32,
